@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ventas_MVC.Data;
 
@@ -11,9 +12,11 @@ using Ventas_MVC.Data;
 namespace Ventas_MVC.Migrations
 {
     [DbContext(typeof(VentasContext))]
-    partial class VentasContextModelSnapshot : ModelSnapshot
+    [Migration("20261001140417_CategoriaOpcional")]
+    partial class CategoriaOpcional
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
