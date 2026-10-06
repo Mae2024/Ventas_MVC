@@ -13,21 +13,22 @@
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-       
-
-       
-
             <div class="form-group">
-                <label asp-for="Cliente" class="control-label"></label>
-                <input asp-for="Cliente" class="form-control" />
-                <span asp-validation-for="Cliente" class="text-danger"></span>
+                <label asp-for="ClienteId" class="control-label">Cliente</label>
+                <select asp-for="ClienteId" asp-items="ViewBag.Clientes"  class="form-control" >
+                    <option value="">Seleccione un cliente</option>
+                </select>
+                <span asp-validation-for="ClienteId" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Producto" class="control-label"></label>
-                <input asp-for="Producto" class="form-control" />
-                <span asp-validation-for="Producto" class="text-danger"></span>
+                <label asp-for="ProductoId" class="control-label">Producto</label>
+                <select asp-for="ProductoId" asp-items="ViewBag.Productos" class="form-control" >
+                    <option value="">Seleccione un producto</option>
+                </select>   
+                <span asp-validation-for="ProductoId" class="text-danger"></span>
             </div>
+             
 
             <div class="form-group">
                 <label asp-for="Cantidad" class="control-label"></label>
@@ -35,11 +36,7 @@
                 <span asp-validation-for="Cantidad" class="text-danger"></span>
             </div>
 
-            <div class="form-group">
-                <label asp-for="Monto" class="control-label"></label>
-                <input asp-for="Monto" class="form-control" />
-                <span asp-validation-for="Monto" class="text-danger"></span>
-            </div>
+     
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />
             </div>
@@ -47,6 +44,38 @@
     </div>
 </div>
 
+@if (ViewBag.VentasDelDia != null)
+{
+    var items = (List<Ventas_MVC.Models.Venta>)ViewBag.VentasDelDia;
+
+    <h4 class="mt-4">Cargado hoy para este cliente</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Producto</th>
+                <th>Cantidad</th>
+                <th>Monto</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in items)
+            {
+                <tr>
+                    <td>@item.Producto.Nombre</td>
+                    <td>@item.Cantidad.ToString("0.00")</td>
+                    <td>$@item.Monto.ToString("0.00")</td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <th colspan="2">Total</th>
+                <th>$@items.Sum(v => v.Monto).ToString("0.00")</th>
+            </tr>
+        </tfoot>
+    </table>
+}
+
 <div>
-    <a asp-action="Index">Volver a Listado</a>
+    <a asp-action="Index">Volver a Lista</a>
 </div>
