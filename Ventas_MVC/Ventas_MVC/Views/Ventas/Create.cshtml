@@ -63,14 +63,14 @@
                 <tr>
                     <td>@item.Producto.Nombre</td>
                     <td>@item.Cantidad.ToString("0.00")</td>
-                    <td>$@item.Monto.ToString("0.00")</td>
+                    <td>$@item.Monto.ToString("N0")</td>
                 </tr>
             }
         </tbody>
         <tfoot>
             <tr>
                 <th colspan="2">Total</th>
-                <th>$@items.Sum(v => v.Monto).ToString("0.00")</th>
+                <th>$@items.Sum(v => v.Monto).ToString("N0")</th>
             </tr>
         </tfoot>
     </table>

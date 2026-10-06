@@ -2,6 +2,12 @@
 
 @{
     ViewData["Title"] = "Ventas";
+
+    var grupos = Model
+        .GroupBy(v => new { v.ClienteId, Dia = v.Fecha.Date })
+        .OrderByDescending(g => g.Key.Dia)
+        .ThenBy(g => g.First().Cliente.Nombre)
+        .ToList();
 }
 
 <h1>Ventas</h1>
@@ -9,32 +15,51 @@
 <p>
     <a asp-action="Create">Crear Nueva Venta</a>
 </p>
+
 <table class="table">
     <thead>
         <tr>
-
             <th>Fecha</th>
             <th>Cliente</th>
-            <th>Producto</th>
-            <th>Cantidad</th>
-            <th>Monto</th>
-
+            <th>Productos</th>
+            <th>Total</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var item in Model)
+        @for (int i = 0; i < grupos.Count; i++)
         {
-            <tr>
+            var grupo = grupos[i];
+            var primera = grupo.First();
 
-               <td>@item.Fecha.ToString("yyyy-MM-dd")</td>
-               <td>@item.Cliente.Nombre</td>
-               <td>@item.Producto.Nombre</td>
-               <td>@item.Cantidad.ToString("0.00")</td>
-               <td>@item.Monto.ToString("0.00")</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            <tr data-bs-toggle="collapse" data-bs-target="#detalle-@i" style="cursor:pointer">
+                <td>@grupo.Key.Dia.ToString("yyyy-MM-dd")</td>
+                <td>@primera.Cliente.Nombre</td>
+                <td>@grupo.Count() ▾</td>
+                <td>$@grupo.Sum(v => v.Monto).ToString("N0")</td>
+            </tr>
+            <tr>
+                <td colspan="4" class="p-0 border-0">
+                    <div class="collapse" id="detalle-@i">
+                        <table class="table table-sm mb-0 bg-light">
+                            <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Cantidad</th>
+                                    <th>Monto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in grupo)
+                                {
+                                    <tr>
+                                        <td>@item.Producto.Nombre</td>
+                                        <td>@item.Cantidad.ToString("0.00")</td>
+                                        <td>$@item.Monto.ToString("N0")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
                 </td>
             </tr>
         }
