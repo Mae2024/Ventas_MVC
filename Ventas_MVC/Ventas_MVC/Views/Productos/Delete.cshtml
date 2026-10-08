@@ -1,0 +1,32 @@
+﻿@model Ventas_MVC.Models.Producto
+
+@{
+    ViewData["Title"] = "Eliminar producto";
+    int cantidadVentas = ViewBag.CantidadVentas;
+}
+
+<h1>Eliminar producto</h1>
+
+<dl class="row">
+    <dt class="col-sm-2">Nombre</dt>
+    <dd class="col-sm-10">@Model.Nombre</dd>
+
+    <dt class="col-sm-2">Precio</dt>
+    <dd class="col-sm-10">$ @Model.PrecioUnitario.ToString("N2")</dd>
+</dl>
+
+@if (cantidadVentas > 0)
+{
+    <div class="alert alert-warning">
+        Este producto tiene @cantidadVentas ventas cargadas, por eso no se puede eliminar.
+    </div>
+    <a asp-action="Index" class="btn btn-secondary">Volver</a>
+}
+else
+{
+    <h4>¿Seguro que querés eliminarlo?</h4>
+    <form asp-action="Delete" asp-route-id="@Model.Id" method="post">
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </form>
+}
