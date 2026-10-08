@@ -35,18 +35,18 @@ namespace Ventas_MVC.Controllers
             ViewBag.Clientes = new SelectList(_contexto.Clientes, "Id", "Nombre");
             ViewBag.Productos = new SelectList(_contexto.Productos, "Id", "Nombre");
 
-            if(ClienteId != null)
+            if (ClienteId != null)
             {
                 var hoy = DateTime.Today;
                 ViewBag.VentasDelDia = _contexto.Ventas
-                    .Include(v=>v.Producto)
+                    .Include(v => v.Producto)
                     .Where(v => v.ClienteId == ClienteId && v.Fecha.Date == hoy)
                     .ToList();
 
             }
 
 
-            return View(new Venta {ClienteId = ClienteId ?? 0 });
+            return View(new Venta { ClienteId = ClienteId ?? 0 });
         }
 
 
@@ -57,7 +57,7 @@ namespace Ventas_MVC.Controllers
             var producto = _contexto.Productos.Find(venta.ProductoId);
             if (producto == null)
             {
-                return RedirectToAction("Create", new { ClienteId = venta.ClienteId } );
+                return RedirectToAction("Create", new { ClienteId = venta.ClienteId });
 
             }
 
@@ -69,6 +69,60 @@ namespace Ventas_MVC.Controllers
 
             return RedirectToAction("Create", new { ClienteId = venta.ClienteId });
         }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+
+        {
+            var venta = _contexto.Ventas.Find(id);
+            if (venta == null) return NotFound();
+            {
+
+                ViewBag.Clientes = new SelectList(_contexto.Clientes, "Id", "Nombre");
+                ViewBag.Productos = new SelectList(_contexto.Productos, "Id", "Nombre");
+                return View(venta);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult Edit(int id, Venta venta)
+        {
+            var original = _contexto.Ventas.Find(id);
+            var producto = _contexto.Productos.Find(venta.ProductoId);
+            if (original == null || producto == null) return NotFound();
+
+            original.ClienteId = venta.ClienteId;
+            original.ProductoId = venta.ProductoId;
+            original.Cantidad = venta.Cantidad;
+            original.Monto = venta.Cantidad * producto.PrecioUnitario;
+
+            _contexto.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public IActionResult Delete(int id)
+        {
+            var venta = _contexto.Ventas
+                .Include(v => v.Cliente)
+                .Include(v => v.Producto)
+                .FirstOrDefault(v => v.Id == id);
+            if (venta == null) return NotFound();
+
+            return View(venta);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var venta = _contexto.Ventas.Find(id);
+            if (venta != null)
+            {
+                _contexto.Ventas.Remove(venta);
+                _contexto.SaveChanges();
+            }
+            return RedirectToAction("Index");
+        }
+
 
 
     }

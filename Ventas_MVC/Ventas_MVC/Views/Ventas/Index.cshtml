@@ -46,6 +46,7 @@
                                     <th>Producto</th>
                                     <th>Cantidad</th>
                                     <th>Monto</th>
+                                    <th> </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -55,6 +56,10 @@
                                         <td>@item.Producto.Nombre</td>
                                         <td>@item.Cantidad.ToString("0.00")</td>
                                         <td>$@item.Monto.ToString("N0")</td>
+                                        <td>
+                                            <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> |
+                                            <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a>
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
