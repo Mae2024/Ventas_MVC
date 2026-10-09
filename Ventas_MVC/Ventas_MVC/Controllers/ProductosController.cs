@@ -23,7 +23,7 @@ namespace Ventas_MVC.Controllers
         {
             _contexto.Productos.Add(producto);
             _contexto.SaveChanges();
-            return RedirectToAction("Create");
+            return RedirectToAction("Index");
         }
 
         public IActionResult Index()
