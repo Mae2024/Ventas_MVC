@@ -12,6 +12,31 @@
 
 <h1>Ventas</h1>
 
+<form asp-action="Index" method="get" class="row g-2 mb-3">
+    <div class="col-auto">
+        <label class="form-label" for="fecha">Fecha</label>
+        <input type="date" id="fecha" name="fecha" value="@ViewBag.Fecha" class="form-control" />
+
+    </div>
+    <div class="col-auto">
+    <label class="form-label" for="clienteId">Cliente</label>
+    <select id="clienteId" name="clienteId" asp-items="ViewBag.Clientes" class="form-control">
+            <option value="">Todos</option> 
+        
+    </select>
+    </div>
+
+
+        <div class="col-auto align-self-end">
+            <button type="submit" class="btn btn-primary">Filtrar</button>
+            <a asp-action="Index" class="btn btn-secondary">Limpiar</a>
+        </div>
+
+
+</form>
+
+
+
 <p>
     <a asp-action="Create">Crear Nueva Venta</a>
 </p>
@@ -70,3 +95,8 @@
         }
     </tbody>
 </table>
+
+                                            @if (!grupos.Any())
+                                            {
+                                                <p class="text-muted">No se encontraon ventas para este filtro</p>
+                                            }

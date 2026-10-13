@@ -17,14 +17,30 @@ namespace Ventas_MVC.Controllers
             _contexto = contexto;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(DateTime? fecha, int? clienteId)
         {
-            var ventas = _contexto.Ventas
+            var consulta = _contexto.Ventas
                 .Include(v => v.Cliente)
                 .Include(v => v.Producto)
-                .ToList();
+                .AsQueryable();
 
-            return View(ventas);
+            if (fecha != null)
+            {
+                var dia = fecha.Value.Date;
+                consulta = consulta.Where(v => v.Fecha.Date == dia);
+
+            }
+
+            if (clienteId != null)
+            {
+                consulta = consulta.Where(v=>v.ClienteId == clienteId);
+
+            }
+
+            ViewBag.Clientes = new SelectList(_contexto.Clientes.OrderBy(c => c.Nombre), "Id", "Nombre", clienteId);
+            ViewBag.Fecha = fecha?.ToString("yyyy-MM-dd");
+            return View(consulta.ToList());
+            
         }
 
 
