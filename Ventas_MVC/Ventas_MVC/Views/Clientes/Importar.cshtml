@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Title"] = "Importar clientes";
+    var hayResultado = ViewBag.Resultado == true;
+    var problemas = ViewBag.Problemas as List<string> ?? new List<string>();
+}
+
+<h1>Importar clientes desde Excel</h1>
+
+<p>
+    El archivo tiene que ser .xlsx, con los títulos <strong>NOMBRE</strong> y <strong>DIRECCION</strong>
+    en la primera fila. Los clientes que ya existen se actualizan y los nuevos se crean.
+</p>
+
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">@ViewBag.Error</div>
+}
+
+<form asp-action="Importar" method="post" enctype="multipart/form-data">  
+    <div class="form-group">
+        <input type="file" name="archivo" accept=".xlsx" class="form-control" />
+    </div>
+    <div class="form-group mt-3">
+        <input type="submit" value="Importar" class="btn btn-primary" />
+        <a asp-action="Index" class="btn btn-secondary">Volver a clientes</a>
+    </div>
+</form>
+
+@if (hayResultado)
+{
+    <div class="alert alert-success mt-4">
+        Creados: @ViewBag.Creados |
+        Actualizados: @ViewBag.Actualizados |
+        Sin cambios: @ViewBag.SinCambios
+    </div>
+}
+
+@if (problemas.Count > 0)
+{
+    <h5>Filas omitidas</h5>
+    <ul>
+        @foreach (var p in problemas)
+        {
+            <li>@p</li>
+        }
+    </ul>
+}
