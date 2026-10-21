@@ -49,7 +49,8 @@ namespace Ventas_MVC.Controllers
         public IActionResult Create(int? ClienteId)
         {
             ViewBag.Clientes = new SelectList(_contexto.Clientes, "Id", "Nombre");
-            ViewBag.Productos = new SelectList(_contexto.Productos, "Id", "Nombre");
+            
+            ViewBag.Productos = new SelectList(_contexto.Productos.OrderBy(p => p.Nombre), "Id", "Nombre");  //para ordenar productos alfabetico
 
             if (ClienteId != null)
             {
@@ -95,7 +96,8 @@ namespace Ventas_MVC.Controllers
             {
 
                 ViewBag.Clientes = new SelectList(_contexto.Clientes, "Id", "Nombre");
-                ViewBag.Productos = new SelectList(_contexto.Productos, "Id", "Nombre");
+                ViewBag.Productos = new SelectList(_contexto.Productos.OrderBy(p => p.Nombre), "Id", "Nombre");  //para ordenar productos alfabetico
+
                 return View(venta);
             }
         }
